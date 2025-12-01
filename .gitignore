@@ -1,0 +1,10 @@
+data/
+data_split/
+models/
+__pycache__/
+*.pt
+*.onnx
+.env
+.DS_Store
+notebooks/.ipynb_checkpoints/
+*.log

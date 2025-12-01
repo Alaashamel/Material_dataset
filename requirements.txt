@@ -1,0 +1,12 @@
+torch
+torchvision
+torchaudio
+scikit-learn
+matplotlib
+seaborn
+pandas
+tqdm
+streamlit
+opencv-python
+pillow
+grad-cam
