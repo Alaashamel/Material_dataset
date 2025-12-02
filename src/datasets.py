@@ -38,7 +38,7 @@ def get_transforms(img_size: int) -> Tuple[transforms.Compose, transforms.Compos
     return train_tf, val_tf
 
 def get_dataloaders(data_dir: str, img_size: int, batch_size: int, num_workers: int = 0):
-    root = Path(data_dir)
+    root = Path(data_dir) #Data
     if (root / "train").exists():
         train_tf, val_tf = get_transforms(img_size)
         train_ds = datasets.ImageFolder(root / "train", transform=train_tf)

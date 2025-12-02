@@ -1,5 +1,5 @@
-data/
-data_split/
+data/raw/
+data/processed/
 models/
 __pycache__/
 *.pt
@@ -8,3 +8,4 @@ __pycache__/
 .DS_Store
 notebooks/.ipynb_checkpoints/
 *.log
+scripts/__pycache__/

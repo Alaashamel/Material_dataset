@@ -1,0 +1,31 @@
+{
+  "source_dir": "D:\\deeplearning_classificationProject\\Image_classification\\Image_classification\\archive (4)\\Material_dataset",
+  "output_dir": "D:\\deeplearning_classificationProject\\Image_classification\\Image_classification\\archive (4)\\Material_dataset\\data",
+  "ratios": {
+    "train": 0.7,
+    "val": 0.15,
+    "test": 0.15
+  },
+  "classes": [
+    "Binary_Masks",
+    "JPEGImages"
+  ],
+  "class_to_idx": {
+    "Binary_Masks": 0,
+    "JPEGImages": 1
+  },
+  "counts": {
+    "train": {
+      "Binary_Masks": 14000,
+      "JPEGImages": 14000
+    },
+    "val": {
+      "Binary_Masks": 3000,
+      "JPEGImages": 3000
+    },
+    "test": {
+      "Binary_Masks": 3000,
+      "JPEGImages": 3000
+    }
+  }
+}
