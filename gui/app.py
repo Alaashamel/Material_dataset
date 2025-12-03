@@ -10,6 +10,7 @@ from src.utils import IMAGENET_MEAN, IMAGENET_STD
 from src.models import build_model
 import pandas as pd
 import requests
+from urllib.parse import urlparse
 
 @st.cache_resource
 def load_model(model_name: str, ckpt_path: str):
@@ -76,9 +77,22 @@ with st.sidebar:
     options = ['resnet50','efficientnet_b0','inception_v3']
     st.selectbox('Model', options, key='model_name', on_change=_on_model_change)
     st.text_input('Checkpoint path', key='ckpt_path')
-    ckpt_url = st.text_input('Checkpoint URL (optional)')
+    ckpt_url = st.text_input('Checkpoint URL (optional)', placeholder='https://raw.githubusercontent.com/Alaashamel/Material_dataset/main/models/resnet50_best.pt')
+    ckpt_upload = st.file_uploader('Upload checkpoint (.pt)', type=['pt'], key='ckpt_upload')
+    if ckpt_upload is not None:
+        try:
+            out_path = Path(st.session_state.get('ckpt_path', 'models/resnet50_best.pt'))
+            out_path.parent.mkdir(parents=True, exist_ok=True)
+            with open(out_path, 'wb') as f:
+                f.write(ckpt_upload.getbuffer())
+            st.success(f"Checkpoint uploaded to {out_path}")
+        except Exception as e:
+            st.error(str(e))
     if st.button('Download checkpoint') and ckpt_url:
         try:
+            parsed = urlparse(ckpt_url)
+            if parsed.scheme not in ('http', 'https'):
+                raise ValueError('Provide a full https URL (e.g., GitHub raw or Releases)')
             out_path = Path(st.session_state.get('ckpt_path', 'models/resnet50_best.pt'))
             out_path.parent.mkdir(parents=True, exist_ok=True)
             r = requests.get(ckpt_url, stream=True, timeout=60)
