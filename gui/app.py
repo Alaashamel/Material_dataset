@@ -3,10 +3,13 @@ import torch
 import numpy as np
 from PIL import Image, ImageEnhance, ImageFilter
 from torchvision import transforms
-from src.utils import IMAGENET_MEAN, IMAGENET_STD
 from pathlib import Path
+import sys
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+from src.utils import IMAGENET_MEAN, IMAGENET_STD
 from src.models import build_model
 import pandas as pd
+import requests
 
 @st.cache_resource
 def load_model(model_name: str, ckpt_path: str):
@@ -73,6 +76,20 @@ with st.sidebar:
     options = ['resnet50','efficientnet_b0','inception_v3']
     st.selectbox('Model', options, key='model_name', on_change=_on_model_change)
     st.text_input('Checkpoint path', key='ckpt_path')
+    ckpt_url = st.text_input('Checkpoint URL (optional)')
+    if st.button('Download checkpoint') and ckpt_url:
+        try:
+            out_path = Path(st.session_state.get('ckpt_path', 'models/resnet50_best.pt'))
+            out_path.parent.mkdir(parents=True, exist_ok=True)
+            r = requests.get(ckpt_url, stream=True, timeout=60)
+            r.raise_for_status()
+            with open(out_path, 'wb') as f:
+                for chunk in r.iter_content(chunk_size=8192):
+                    if chunk:
+                        f.write(chunk)
+            st.success(f"Checkpoint downloaded to {out_path}")
+        except Exception as e:
+            st.error(str(e))
     img_size = st.slider('Image size', min_value=128, max_value=512, value=224, step=32)
     show_cam = st.checkbox('Show Grad-CAM', value=False)
     conf_thresh = st.slider('Confidence threshold', 0.0, 1.0, 0.6, 0.05)

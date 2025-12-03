@@ -10,3 +10,4 @@ streamlit
 opencv-python
 pillow
 grad-cam
+requests
